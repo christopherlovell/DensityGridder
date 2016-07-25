@@ -15,7 +15,7 @@ make
 
 # To run 
 
-To run the gridder on the login node you need to load the following modules. Only do this if the grid you wish to make is relatively inexpensive. Otherwise, submit a job as usual.
+To run gridder on a Platform LSF batch system, submit grid_run.sh. You may need to change the modules epending on your system availability / compiler requirements. To run on the login node you need to load the following modules.
 
 ```
 module unload intel_comp
@@ -25,12 +25,3 @@ module load hdf5
 
 mpirun -np 4 gridder.x
 ```
-
-
-## *Deprecated*
-
-```
-mpicc -I/usr/include/hdf5/serial -o parallel_hdf5 -L/usr/lib/x86_64-linux-gnu/hdf5/serial parallel_hdf5.c -lhdf5 -lm -lgmp
-```
-
-

@@ -233,11 +233,13 @@ int main (int argc, char **argv) {
          * For periodic box, combine grid edges 
          */
 
+        printf("Combining grid edges.\n");
+
         for(i = 0; i < grid_dims; i++){
             for(j = 0; j < grid_dims; j++){
-                w[offset(0, i, j, grid_dims)] += w[offset(grid_dims, i, j, grid_dims)];
-                w[offset(i, 0, j, grid_dims)] += w[offset(i, grid_dims, j, grid_dims)];
-                w[offset(i, j, 0, grid_dims)] += w[offset(i, j, grid_dims, grid_dims)];
+                w[offset(0, i, j, grid_dims)] += w[offset(grid_dims-1, i, j, grid_dims)];
+                w[offset(i, 0, j, grid_dims)] += w[offset(i, grid_dims-1, j, grid_dims)];
+                w[offset(i, j, 0, grid_dims)] += w[offset(i, j, grid_dims-1, grid_dims)];
             }
         }
 
@@ -251,9 +253,10 @@ int main (int argc, char **argv) {
 		if (fp == NULL) printf("File could not be opened.\n");		
 	
 		// Save final weight array
-		for(i = 0; i < grid_dims; i++){
-			for(j = 0; j < grid_dims; j++){
-				for(k = 0; k < grid_dims; k++){
+        // *ignoring outside edge of box (added to inside edge to account for periodic box, see above)
+		for(i = 0; i < grid_dims-1; i++){
+			for(j = 0; j < grid_dims-1; j++){
+				for(k = 0; k < grid_dims-1; k++){
 					fprintf(fp, "%d\n",  w[offset(k, j, i, grid_dims)]);
 				}
 

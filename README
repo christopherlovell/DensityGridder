@@ -1,0 +1,36 @@
+
+# Density Gridder
+
+Takes 3D particle data and maps on to a density grid, using MPI. Can optionally apply convolution using serial R scripts.
+
+
+# Compile
+
+To compile gridder.c execute the following in the top level directory.
+
+```
+make clean
+make
+```
+
+# To run 
+
+To run the gridder on the login node you need to load the following modules. Only do this if the grid you wish to make is relatively inexpensive. Otherwise, submit a job as usual.
+
+```
+module unload intel_comp
+module load gnu_comp
+module load openmpi
+module load hdf5
+
+mpirun -np 4 gridder.x
+```
+
+
+## *Deprecated*
+
+```
+mpicc -I/usr/include/hdf5/serial -o parallel_hdf5 -L/usr/lib/x86_64-linux-gnu/hdf5/serial parallel_hdf5.c -lhdf5 -lm -lgmp
+```
+
+

@@ -3,6 +3,13 @@
 
 Takes 3D particle data and maps on to a density grid, using MPI. Can optionally apply convolution using serial R scripts.
 
+Given a box size *lbox*, and grid size *grid*, the gridder finds the density using a Nearest Grid Point assignment scheme.
+
+|---------lbox----------|
+|-|-|-|-|-|-|-|-|-|-|-|-| <- grid=12
+
+Center of each grid point in each dimension = lbox/grid/2
+
 
 # Compile
 

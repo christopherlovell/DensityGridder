@@ -25,7 +25,7 @@
 int count_files(const char *, const char *);
 const char *get_filename_ext(const char *);
 int offset(int, int, int, int);
-void NGP(int *, int, int, int, int);
+void NGP(int *, int, float, float, float);
 
 int main (int argc, char **argv) {
 
@@ -83,8 +83,8 @@ int main (int argc, char **argv) {
 	/*
 	 * Initialise weight grid
 	 */
-    int grid_size = 600;
-	int grid_dims = grid_size + 1; //grid_size + 1;
+    //int grid_size = 600;
+	int grid_dims = 600; //grid_size + 1; 
 	double sim_dims = 2168.64;  // simulation dimensions
 	
 	hid_t 		file, dataset, dataspace;   // handles
@@ -110,6 +110,9 @@ int main (int argc, char **argv) {
 	
 	char * fullname;
 
+    long long int particle_count = 0;
+    long long int particle_count_slave = 0;
+
 	for(i = mpi_rank; i<file_count; i+=mpi_size){
 
 		printf("%d %s\n",i,files[i]);
@@ -120,16 +123,9 @@ int main (int argc, char **argv) {
 		strcat(fullname, input_directory);  // concatenate directory and filename strings
 		strcat(fullname, files[i]);
 
-		//printf("%s\n",fullname);
-
 		//  Open the hdf5 file and dataset
 		file = H5Fopen(fullname, H5F_ACC_RDONLY, H5P_DEFAULT);
 		dataset = H5Dopen(file, DATASETNAME, H5P_DEFAULT);
-
-
-		printf("%s\n",fullname);
-
-
 
 		free(fullname);
 
@@ -142,7 +138,9 @@ int main (int argc, char **argv) {
 		int rows = dims[0];
 		int cols = dims[1];
 
-        printf("%d: %d particles",i,rows);
+        particle_count_slave += rows;
+
+        printf("%d: %d particles, %d total\n", i, rows, particle_count_slave);
 		
 		float **data_out; 
 		
@@ -187,7 +185,7 @@ int main (int argc, char **argv) {
 
 			// w_slave[offset((int)xpos, (int)ypos, (int)zpos, grid_dims)] += 1;
             
-            NGP(w_slave, grid_dims, xpos, ypos, zpos);  // NGP assignment (CIC & TSC also available)
+            NGP(w_slave, grid_dims, xpos, ypos, zpos);  // NGP assignment (CIC & TSC to be developed)
 
 		}
 
@@ -198,8 +196,12 @@ int main (int argc, char **argv) {
 	}
 	
 	MPI_Reduce(w_slave, w, w_grid_size, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    MPI_Reduce(&particle_count_slave, &particle_count, 1, MPI_LONG_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
 	
     if(mpi_rank == 0){
+
+        printf("Total particles: %d\n", particle_count);
 
         /*
          * Check particle number
@@ -232,16 +234,20 @@ int main (int argc, char **argv) {
         /*
          * For periodic box, combine grid edges 
          */
-
+/*
         printf("Combining grid edges.\n");
 
         for(i = 0; i < grid_dims; i++){
             for(j = 0; j < grid_dims; j++){
-                w[offset(0, i, j, grid_dims)] += w[offset(grid_dims-1, i, j, grid_dims)];
-                w[offset(i, 0, j, grid_dims)] += w[offset(i, grid_dims-1, j, grid_dims)];
-                w[offset(i, j, 0, grid_dims)] += w[offset(i, j, grid_dims-1, grid_dims)];
+                w[offset(0, i, j, grid_dims)] += 1; 
+                //w[offset(grid_size, i, j, grid_dims)];
+                w[offset(i, 0, j, grid_dims)] += 1;
+                //w[offset(i, grid_size, j, grid_dims)];
+                w[offset(i, j, 0, grid_dims)] += 1;
+                //w[offset(i, j, grid_size, grid_dims)];
             }
         }
+*/
 
         /*
          * Write to file
@@ -253,10 +259,9 @@ int main (int argc, char **argv) {
 		if (fp == NULL) printf("File could not be opened.\n");		
 	
 		// Save final weight array
-        // *ignoring outside edge of box (added to inside edge to account for periodic box, see above)
-		for(i = 0; i < grid_dims-1; i++){
-			for(j = 0; j < grid_dims-1; j++){
-				for(k = 0; k < grid_dims-1; k++){
+		for(i = 0; i < grid_dims; i++){
+			for(j = 0; j < grid_dims; j++){
+				for(k = 0; k < grid_dims; k++){
 					fprintf(fp, "%d\n",  w[offset(k, j, i, grid_dims)]);
 				}
 
@@ -284,9 +289,9 @@ int main (int argc, char **argv) {
 /*
  * Nearest Grid Point assignment
  */
-void NGP(int * array, int dims, int x, int y, int z){
+void NGP(int * array, int dims, float x, float y, float z){
 
-    array[offset((int)(x + 0.5), (int)(y + 0.5), (int)(z + 0.5), dims)] += 1;
+    array[offset((int) x, (int) y, (int) z, dims)] += 1;
 
 }
 
@@ -349,3 +354,6 @@ const char *get_filename_ext(const char * filename) {
  * Given a 3D array (grid_dims^3) flattened to 1D, return offset for given 3D coordinates in flat array
  */
 int offset(int x, int y, int z, int grid_dims) { return ( z * grid_dims * grid_dims ) + ( y * grid_dims ) + x ; }
+
+
+

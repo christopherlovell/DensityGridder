@@ -12,7 +12,6 @@ grid = 600
 #'
 
 dir <- "../data/"
-
 snap <- "weights_002_"  # z = 4.687 
 
 data <- scan(paste0(dir,snap,grid,'.bin'),what=integer())
@@ -101,11 +100,6 @@ radius = 10
 conv_t <- conv_it(arr,grid,lbox=lbox,side=radius)
 
 which(conv_t == max(conv_t),arr.ind=T) * (lbox/grid)
-
-
-
-
-
 
 
 

@@ -14,11 +14,10 @@ Center of each grid point in each dimension = `lbox/grid/2`
 
 Configuration parameters are contained in config.txt, which now does not need to be set at compile time. The configurable parameters are as follows:
 
-INPUT_DIRECTORY: location of input particle files
-OUTPUT_DIRECTORY: location of output file, with name and extension
-GRID_DIMS: grid dimensions over which density calculated (`grid`)
-SIM_DIMS: size of simulation box along one side (`lbox`)
-
+- INPUT_DIRECTORY: location of input particle files
+- OUTPUT_DIRECTORY: location of output file, with name and extension
+- GRID_DIMS: grid dimensions over which density calculated (`grid`)
+- SIM_DIMS: size of simulation box along one side (`lbox`)
 
 ## Compile
 

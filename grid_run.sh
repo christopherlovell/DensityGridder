@@ -3,8 +3,8 @@
 #BSUB -q cosma
 #BSUB -P durham
 #BSUB -J density_gridder
-#BSUB -W 01:00
-#BSUB -n 12
+#BSUB -W 00:35
+#BSUB -n 24
 #BSUB -o logs/grid_out.%J
 #BSUB -e logs/grid_err.%J
 

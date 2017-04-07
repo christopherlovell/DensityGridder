@@ -15,6 +15,7 @@
 #include <math.h>
 
 #include <stdlib.h>
+#include "read_config.h"
 
 // TODO: set as runtime value
 #define DATASETNAME "/PartType1/Coordinates"  // dataset within hdf5 file 
@@ -31,7 +32,29 @@ int main (int argc, char **argv) {
 
 	int i,j,k;
 
+    /*
+     * Read config file
+     */
+    struct config_struct config;
+
+    read_config_file("config.txt", &config);
+
+	char * input_directory = config.input_dir; 
+	char * output_file = config.output_dir;
+
 	/*
+	 * Initialise weight grid
+	 */
+    //int grid_size = 600;
+	int grid_dims = config.grid_dims; //grid_size + 1; 
+	double sim_dims = config.sim_dims;  // simulation dimensions
+	
+	hid_t 		file, dataset, dataspace;   // handles
+	herr_t 		status;
+	int		    status_n;
+	hsize_t 	dims[2];           			// dataset dimensions
+	
+    /*
      * Initialize MPI
      */
     int mpi_size, mpi_rank;
@@ -42,17 +65,19 @@ int main (int argc, char **argv) {
    	int ierr;  // store error values for MPI operations
    	int root_process = 0;  // set root process to zero processor
     
+
+    if(mpi_rank == 0){
+        printf("\nInput directory: %s\nOutput directory+filename: %s", input_directory, output_file);
+        printf("\nGrid dimensions: %d", grid_dims);
+        printf("\nSimulation dimensions: %lf", sim_dims);
+    }
    	/*
 	 * Count hdf5 files in specified directory
 	 */	
 	
-	char * input_directory = "/cosma5/data/dp004/PROJECTS/Eagle/dm_eagle_volume_L3200/snapdir_002/";
-	char * output_file = "/cosma/home/dp004/dc-love2/eagle_demo/parallel_hdf5/data/weights_002_600.bin";
-	
 	const char * extension = "hdf5";
 
 	int file_count = count_files(input_directory,extension);
-    
     
 
 	/*
@@ -80,17 +105,7 @@ int main (int argc, char **argv) {
 	closedir(dirp);
 
 
-	/*
-	 * Initialise weight grid
-	 */
-    //int grid_size = 600;
-	int grid_dims = 600; //grid_size + 1; 
-	double sim_dims = 2168.64;  // simulation dimensions
-	
-	hid_t 		file, dataset, dataspace;   // handles
-	herr_t 		status;
-	int		    status_n;
-	hsize_t 	dims[2];           			// dataset dimensions
+
 
 	/*
 	 *  find number of files for given processor
@@ -140,7 +155,7 @@ int main (int argc, char **argv) {
 
         particle_count_slave += rows;
 
-        printf("%d: %d particles, %d total\n", i, rows, particle_count_slave);
+        printf("%d: %d particles, %lld total\n", i, rows, particle_count_slave);
 		
 		float **data_out; 
 		
@@ -201,7 +216,7 @@ int main (int argc, char **argv) {
 	
     if(mpi_rank == 0){
 
-        printf("Total particles: %d\n", particle_count);
+        printf("Total particles: %lld\n", particle_count);
 
         /*
          * Check particle number

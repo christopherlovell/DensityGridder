@@ -18,8 +18,8 @@
 #include "read_config.h"
 
 // TODO: set as runtime value
-#define DATASETNAME "/PartType1/Coordinates"  // dataset within hdf5 file 
 // PartType1: Dark Matter
+#define DATASETNAME "/PartType1/Coordinates"  // dataset within hdf5 file 
 
 
 // function initialisers
@@ -30,7 +30,7 @@ void NGP(int *, int, float, float, float);
 
 int main (int argc, char **argv) {
 
-	int i,j,k;
+    int i,j,k;
 
     /*
      * Read config file
@@ -45,13 +45,12 @@ int main (int argc, char **argv) {
 	/*
 	 * Initialise weight grid
 	 */
-    //int grid_size = 600;
 	int grid_dims = config.grid_dims; //grid_size + 1; 
 	double sim_dims = config.sim_dims;  // simulation dimensions
-	
+
 	hid_t 		file, dataset, dataspace;   // handles
 	herr_t 		status;
-	int		    status_n;
+	int		status_n;
 	hsize_t 	dims[2];           			// dataset dimensions
 	
     /*
@@ -103,8 +102,6 @@ int main (int argc, char **argv) {
 		}
 	}
 	closedir(dirp);
-
-
 
 
 	/*

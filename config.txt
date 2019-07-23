@@ -1,4 +1,4 @@
-INPUT_DIR /an/example/directory/
-OUTPUT_DIR /another/example/directory/
-GRID_DIMS 600
-SIM_DIMS 2168.64
+INPUT_DIR example/
+OUTPUT_DIR example/grid_weights.txt
+GRID_DIMS 100
+SIM_DIMS 100

@@ -16,5 +16,5 @@ module load hdf5/1.10.3
 
 mpicc -I/usr/include/hdf5/serial -o gridder.x -L/usr/lib/x86_64-linux-gnu/hdf5/serial gridder.c -lhdf5 -lm -lgmp
 
-mpirun gridder.x
+mpirun gridder.x config.txt
 

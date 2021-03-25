@@ -37,7 +37,8 @@ int main (int argc, char **argv) {
      */
     struct config_struct config;
 
-    read_config_file("config.txt", &config);
+    // read_config_file("config.txt", &config);
+    read_config_file(argv[1], &config);
 
 	char * input_directory = config.input_dir; 
 	char * output_file = config.output_dir;

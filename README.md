@@ -17,7 +17,7 @@ Configuration parameters are contained in config.txt, which now does not need to
 - INPUT_DIRECTORY: location of input particle files
 - OUTPUT_DIRECTORY: location of output file, with name and extension
 - GRID_DIMS: grid dimensions over which density calculated (`grid`)
-- SIM_DIMS: size of simulation box along one side (`lbox`)
+- SIM_DIMS: size of simulation box along one side (`lbox/h`)
 
 ## Compile
 
@@ -30,11 +30,15 @@ make
 
 ## To run 
 
-To run gridder on a Platform LSF batch system, submit grid_run.sh. You may need to change the modules depending on your system availability / compiler requirements. To run on the login node you need to load the following modules.
+To run gridder on a SLURM batch system:
+
+`sbatch grid_run.sh`. 
+
+You may need to change the modules depending on your system availability / compiler requirements. To run on the login node you need to load the following modules.
 
 ```
 module unload intel_comp
-module load gnu_comp
+module load gsl
 module load openmpi
 module load hdf5
 

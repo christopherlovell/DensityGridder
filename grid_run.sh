@@ -9,12 +9,12 @@
 # #SBATCH --exclusive
 
 module purge
-module load intel_comp/2021.1.0
-module load gsl/2.4
-module load intel_mpi/2020-update2
-module load hdf5/1.10.3 
+module load intel_comp
+module load gsl
+module load openmpi
+module load hdf5 
 
 mpicc -I/usr/include/hdf5/serial -o gridder.x -L/usr/lib/x86_64-linux-gnu/hdf5/serial gridder.c -lhdf5 -lm -lgmp
 
-mpirun gridder.x config.txt
+mpirun gridder.x configs/eagle_config.txt
 

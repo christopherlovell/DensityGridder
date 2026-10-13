@@ -1,0 +1,5 @@
+INPUT_DIR example/
+OUTPUT_FILE_N example/grid_N.dat
+OUTPUT_FILE_DIV example/grid_div.dat
+GRID_DIMS 50
+SIM_DIMS 50

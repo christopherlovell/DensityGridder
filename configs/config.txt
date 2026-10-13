@@ -1,4 +1,4 @@
 INPUT_DIR example/
 OUTPUT_DIR example/grid_weights.txt
-GRID_DIMS 100
-SIM_DIMS 100
+GRID_DIMS 50
+SIM_DIMS 50

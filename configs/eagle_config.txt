@@ -1,0 +1,10 @@
+#INPUT_DIR /cosma5/data/dp004/PROJECTS/Eagle/dm_eagle_volume_L3200/snapdir_002/
+INPUT_DIR /cosma7/data/dp004/petert/Eagle/dm_eagle_volume_L3200/snapdir_002/ 
+OUTPUT_DIR /cosma7/data/dp004/petert/grid_weights/weights_3200_snap002_res1200.dat
+OUTPUT_FILE_N /cosma7/data/dp004/petert/grid_weights/weights_3200_snap002_res1200.dat
+OUTPUT_FILE_DIVX /cosma7/data/dp004/petert/grid_weights/divx_3200_snap002_res1200.dat
+OUTPUT_FILE_DIVY /cosma7/data/dp004/petert/grid_weights/divy_3200_snap002_res1200.dat
+OUTPUT_FILE_DIVZ /cosma7/data/dp004/petert/grid_weights/divz_3200_snap002_res1200.dat
+GRID_DIMS 1200
+SLICE_DIM 120
+SIM_DIMS 2168.64
